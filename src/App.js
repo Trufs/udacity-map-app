@@ -16,14 +16,14 @@ const places = [{name: 'Rysy', lat: 49.179548, lng: 20.088064},
 			];
 
 class App extends Component {
-
 componentDidMount() {
-	//test call to darksky for weather info
-// const proxyurl = "https://cors-anywhere.herokuapp.com/";
-// const url = "https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/49.299181,19.949562?exclude=[minutely,daily]&units=auto"; // site that doesn’t send Access-Control-*
-// fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/https://example.com
-// .then(response => response.text())
-// .then(contents => console.log(contents))
+	//call to darksky for weather info
+	const proxyurl = "https://cors-anywhere.herokuapp.com/";
+	places.map((place) => (
+		fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=auto`) // https://cors-anywhere.herokuapp.com/https://example.com
+		.then(response => response.text())
+		.then(contents => console.log(contents))
+	))
   }
 
 
