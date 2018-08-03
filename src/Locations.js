@@ -6,14 +6,17 @@ import Place from './Place.js';
 class Locations extends Component {
   render() {
     return (
-      <div>
-      some Locations
-		<ol>
-			<li>
-				<Place />
-			</li>
-		</ol>
-      </div>
+    <div className="locations">
+      <p> Peaks & Towns </p>
+			<ul>
+      {this.props.places.map((place) => (
+        <li key={place.name}>
+          <Place place = {place}/>
+        </li>)
+      )}
+
+			</ul>
+    </div>
     );
   }
 }

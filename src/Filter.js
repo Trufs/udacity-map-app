@@ -5,11 +5,11 @@ class Filter extends Component {
 
   render() {
     return (
-      <div>
-      <label htmlFor="filter">Chosen Location </label>
+      <div className="filter">
+      <label htmlFor="filter">Search for locations </label>
       	<input id="filter"
 	      	type="text"
-					placeholder="Search for locations"
+					placeholder="Location..."
 					// value = {this.props.query}
 					onChange = {this.updateQuery}
 				/>

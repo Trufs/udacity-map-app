@@ -5,10 +5,10 @@ import Locations from './Locations.js';
 class Side extends Component {
   render() {
     return (
-      <div>
+      <nav>
         <Filter />
-        <Locations />
-      </div>
+        <Locations places = {this.props.places}/>
+      </nav>
     );
   }
 }

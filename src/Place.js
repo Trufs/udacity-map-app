@@ -4,7 +4,7 @@ class Place extends Component {
   render() {
     return (
       <div>
-      	one particular place
+      	<p>{`${this.props.place.name}`}</p>
       </div>
     );
   }
