@@ -11,7 +11,11 @@ class Locations extends Component {
 			<ul>
       {this.props.places.map((place) => (
         <li key={place.name}>
-          <Place place = {place}/>
+          <Place
+          place = {place}
+          chosenPlace = {this.props.chosenPlace}
+          onupdateChosenPlace = {this.props.onupdateChosenPlace}
+          />
         </li>)
       )}
 

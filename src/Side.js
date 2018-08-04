@@ -23,8 +23,16 @@ class Side extends Component {
     return (
 
       <nav>
-        <Filter query = {this.props.query} onupdateQuery={this.props.onupdateQuery}/>
-        <Locations places = {placesToShow}/>
+        <Filter
+	        query = {this.props.query}
+	        onupdateQuery={this.props.onupdateQuery}
+        />
+        <Locations
+	        places = {placesToShow}
+			chosenPlace = {this.props.chosenPlace}
+			onupdateChosenPlace = {this.props.onupdateChosenPlace}
+        />
+
         <div className="attribution">
 			<a href="https://darksky.net/poweredby/">
 				<img src={img} alt="darksky logo" height="38" width="95"/>

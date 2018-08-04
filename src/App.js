@@ -16,18 +16,26 @@ const places = [
 			{name: 'Stary Smokovec', lat: 49.139046, lng: 20.220382}
 			];
 
+let placesToShow = places;
+
 class App extends Component {
 	state = {
-		query: ''
+		query: '',
+		chosenPlace: ''
 	}
 
 	updateQuery = (query) => {
 		this.setState({query: query});
-		console.log("it's app.js, I've got your query bae");
-		console.log(query);
-
+		const match = new RegExp(query, 'i');
+		placesToShow = places.filter((place) => match.test(place.name));
+		console.log(placesToShow);
 	}
 
+	updateChosenPlace = (chosenPlace) => {
+		this.setState({chosenPlace: chosenPlace});
+		console.log("Hello! it's chosen place.");
+		console.log(chosenPlace);  //chosen place's marker should bounce or sth and open the info window
+	}
 
 componentDidMount() {
 	// //call to darksky for weather info
@@ -42,13 +50,16 @@ componentDidMount() {
 
   render() {
 
-	const match = new RegExp(this.state.query, 'i');
-  	let placesToShow = places.filter((place) => match.test(place.name));
-  	console.log(placesToShow);
     return (
       <React.Fragment>
         <Header />
-          <Side places={placesToShow} query={this.state.query} onupdateQuery={this.updateQuery} />
+          <Side
+          places={placesToShow}
+          query={this.state.query}
+          onupdateQuery={this.updateQuery}
+          chosenPlace = {this.state.chosenPlace}
+          onupdateChosenPlace = {this.updateChosenPlace}
+           />
           <Map places={placesToShow} />
       </React.Fragment>
     );
