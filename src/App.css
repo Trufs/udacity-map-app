@@ -7,7 +7,7 @@ html, body {
 
 body {
   font-family: 'Montserrat', sans-serif;
-  color: #8DD9CC;
+  color: white;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

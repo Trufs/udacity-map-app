@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 //what's supposed to happen with the filtered locations?
 class Filter extends Component {
-	updateQuery(){};
+  constructor(props) {
+    super(props);
+    this.updateQuery = this.updateQuery.bind(this);
+  }
+
+  updateQuery(e) {
+    this.props.onupdateQuery(e.target.value);
+  }
 
   render() {
     return (
@@ -10,7 +17,7 @@ class Filter extends Component {
       	<input id="filter"
 	      	type="text"
 					placeholder="Location..."
-					// value = {this.props.query}
+					value = {this.props.query}
 					onChange = {this.updateQuery}
 				/>
       </div>
