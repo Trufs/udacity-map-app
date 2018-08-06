@@ -54,13 +54,16 @@ componentDidMount() {
       <React.Fragment>
         <Header />
           <Side
-          places={placesToShow}
-          query={this.state.query}
-          onupdateQuery={this.updateQuery}
-          chosenPlace = {this.state.chosenPlace}
-          onupdateChosenPlace = {this.updateChosenPlace}
+	          places={placesToShow}
+	          query={this.state.query}
+	          onupdateQuery={this.updateQuery}
+	          chosenPlace = {this.state.chosenPlace}
+	          onupdateChosenPlace = {this.updateChosenPlace}
            />
-          <Map places={placesToShow} />
+          <Map
+	          places={placesToShow}
+	          chosenPlace={this.state.chosenPlace}
+          />
       </React.Fragment>
     );
   }
