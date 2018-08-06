@@ -17,11 +17,13 @@ const places = [
 			];
 
 let placesToShow = places;
+let nbReady = 0;
 
 class App extends Component {
 	state = {
 		query: '',
-		chosenPlace: ''
+		chosenPlace: '',
+		ready: 0
 	}
 
 	updateQuery = (query) => {
@@ -38,18 +40,23 @@ class App extends Component {
 	}
 
 componentDidMount() {
-	// //call to darksky for weather info
-	// const proxyurl = "https://cors-anywhere.herokuapp.com/";
-	// places.map((place) => (
-	// 	fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=auto`) // https://cors-anywhere.herokuapp.com/https://example.com
-	// 	.then(response => response.text())
-	// 	.then(contents => console.log(contents))
-	// ))
+	//call to darksky for weather info
+	const proxyurl = "https://cors-anywhere.herokuapp.com/";
+	places.map((place) => (
+		fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=auto`) // https://cors-anywhere.herokuapp.com/https://example.com
+		.then(response => response.json())
+		.then(contents => {
+			place.weather = contents;
+			console.log(place.weather);
+			nbReady += 1;
+			this.setState({ready: nbReady});
+			console.log(this.state.ready)
+		})
+	))
   }
 
 
   render() {
-
     return (
       <React.Fragment>
         <Header />
@@ -60,10 +67,12 @@ componentDidMount() {
 	          chosenPlace = {this.state.chosenPlace}
 	          onupdateChosenPlace = {this.updateChosenPlace}
            />
+           {this.state.ready===places.length &&
           <Map
 	          places={placesToShow}
 	          chosenPlace={this.state.chosenPlace}
           />
+      }
       </React.Fragment>
     );
   }

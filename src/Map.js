@@ -42,7 +42,11 @@ componentDidMount() {
         });
         markersArray.push(marker);
         var infowindow = new window.google.maps.InfoWindow({
-          content: place.name
+          content: `<div>${place.name}</div>
+                    <div>${place.weather.currently.summary}</div>
+                    <div>Temperature: ${place.weather.currently.temperature}</div>
+                    <div>Wind Speed: ${place.weather.currently.windSpeed}</div>
+          `
         });
 
         marker.addListener('click', function() {
