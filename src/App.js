@@ -6,14 +6,14 @@ import Side from './Side.js';
 
 const places = [
 			{name: 'Rysy', lat: 49.179548, lng: 20.088064},
-			{name: 'Krywan', lat: 49.162545, lng: 19.999916},
-			{name: 'Lomnica', lat: 49.195301, lng: 20.213147},
-			{name: 'Koscielec', lat: 49.2254, lng: 20.014574},
-			{name: 'Bystra', lat: 49.189007, lng: 19.842498},
-			{name: 'Banikov', lat: 49.198333, lng: 19.71194419},
-			{name: 'Zakopane', lat: 49.299181, lng: 19.949562},
-			{name: 'Zuberzec', lat: 49.260516, lng: 19.614379},
-			{name: 'Stary Smokovec', lat: 49.139046, lng: 20.220382}
+			{name: 'Krywan', lat: 49.162545, lng: 19.999916}
+			// {name: 'Lomnica', lat: 49.195301, lng: 20.213147},
+			// {name: 'Koscielec', lat: 49.2254, lng: 20.014574},
+			// {name: 'Bystra', lat: 49.189007, lng: 19.842498},
+			// {name: 'Banikov', lat: 49.198333, lng: 19.71194419},
+			// {name: 'Zakopane', lat: 49.299181, lng: 19.949562},
+			// {name: 'Zuberzec', lat: 49.260516, lng: 19.614379},
+			// {name: 'Stary Smokovec', lat: 49.139046, lng: 20.220382}
 			];
 
 let placesToShow = places;
@@ -37,6 +37,7 @@ class App extends Component {
 		this.setState({chosenPlace: chosenPlace});
 		console.log("Hello! it's chosen place.");
 		console.log(chosenPlace);  //chosen place's marker should bounce or sth and open the info window
+		placesToShow = places.filter((place) => place.name === chosenPlace);
 	}
 
 componentDidMount() {
@@ -67,6 +68,7 @@ componentDidMount() {
 	          chosenPlace = {this.state.chosenPlace}
 	          onupdateChosenPlace = {this.updateChosenPlace}
            />
+
            {this.state.ready===places.length &&
           <Map
 	          places={placesToShow}

@@ -1,46 +1,49 @@
 import React, { Component } from 'react';
+import Markers from './Markers.js';
 
-
+const markersArray = [];
+const infowindowsArray = [];
 class Map extends Component {
 	state = {
-	      mapIsReady: false,
+	      map: false,
+        mapDisplayed: false
 	    };
 
-//https://stackoverflow.com/a/51437173
+//idea from https://stackoverflow.com/a/51437173
 componentDidMount() {
-		//this probably can be done with fetch, no? or a normal promise?
-
-		//----
-    const ApiKey = 'AIzaSyDGkQx8UGmIKa8CxCfQv-1pgoIvhw9Nkvs';
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${ApiKey}`;
-    script.async = true;
-    script.defer = true;
-    script.addEventListener('load', () => {
-      this.setState({ mapIsReady: true });
+    const mapScript = document.createElement('script');
+    mapScript.async = true;
+    mapScript.defer = true;
+    mapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDGkQx8UGmIKa8CxCfQv-1pgoIvhw9Nkvs';
+    mapScript.addEventListener('load', () => {
+      this.setState({ map: true });
     });
-
-    document.body.appendChild(script);
+    console.log('appending script');
+    document.body.appendChild(mapScript);
   }
 
-
   componentDidUpdate() {
-    if (this.state.mapIsReady) {
-      this.map = new window.google.maps.Map(document.getElementById('map'), {
-        center: {lat: 49.155698, lng: 20.044299},
-        zoom: 10,
-        mapTypeId: 'terrain',
-      });
-      const markersArray = [];
-      const infowindowsArray = [];
-      this.props.places.map((place) => {
+  //if the script is ready, create map
+    if (this.state.map) {
+
+      if (this.state.mapDisplayed === false){
+        console.log('entering if')
+
+        this.map = new window.google.maps.Map(document.getElementById('map'), {
+          center: {lat: 49.155698, lng: 20.044299},
+          zoom: 10,
+          mapTypeId: 'terrain',
+        });
+        //create initial markers & infowindows
+        this.props.places.map((place) => {
         var marker = new window.google.maps.Marker({
           position: {lat: place.lat, lng: place.lng},
           map: this.map,
           title: place.name,
           animation: window.google.maps.Animation.DROP,
+          visible: true
         });
-        markersArray.push(marker);
+        markersArray.push(marker)
         var infowindow = new window.google.maps.InfoWindow({
           content: `<div>${place.name}</div>
                     <div>${place.weather.currently.summary}</div>
@@ -56,15 +59,31 @@ componentDidMount() {
             markersArray.map((marker) => marker.setAnimation(null)) //clear bouncing of other markers
             marker.setAnimation(window.google.maps.Animation.BOUNCE);
           }
-
             infowindowsArray.map((infowindow) => infowindow.close());
             infowindow.open(this.map, marker);
             infowindowsArray.push(infowindow);
-
-
         });
+        })
 
-      })//and of places.map loop
+      this.setState({mapDisplayed:true})
+
+    }
+      //hide the markers that have no corresponding place
+
+      markersArray.map((marker) => {
+          marker.visible = false;
+          this.props.places.map((place) => {
+          if(marker.title === place.name) {
+            marker.visible=true;
+          }
+        })
+        if(marker.visible === false){
+          marker.setMap(null)
+        }else if(marker.map===null){
+          marker.setMap(this.map);
+        }
+
+      })
     }
   }
 
