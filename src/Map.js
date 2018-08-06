@@ -31,7 +31,7 @@ componentDidMount() {
         zoom: 10,
         mapTypeId: 'terrain',
       });
-
+      const markersArray = [];
       this.props.places.map((place) => {
         var marker = new window.google.maps.Marker({
           position: {lat: place.lat, lng: place.lng},
@@ -39,6 +39,7 @@ componentDidMount() {
           title: place.name,
           animation: window.google.maps.Animation.DROP
         });
+        markersArray.push(marker);
         var infowindow = new window.google.maps.InfoWindow({
           content: place.name
         });
@@ -47,6 +48,7 @@ componentDidMount() {
           if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
           } else {
+            markersArray.map((marker) => marker.setAnimation(null)) //clear bouncing of other markers
             marker.setAnimation(window.google.maps.Animation.BOUNCE);
           }
             infowindow.open(this.map, marker);
