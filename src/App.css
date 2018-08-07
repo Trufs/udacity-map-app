@@ -69,6 +69,15 @@ ul {
   padding-left: 10px;
   font-size: 0.8em;
   text-align: left;
+  cursor: pointer;
+}
+
+.chosen {
+  color: #44D7A8;
+}
+
+.show-all {
+
 }
 
 .attribution {

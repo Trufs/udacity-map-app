@@ -7,13 +7,15 @@ class Place extends Component {
   }
 
   updateChosenPlace(e) {
-  	console.log(e.target.textContent);
     this.props.onupdateChosenPlace(e.target.textContent);
+    let previousElement = document.querySelector(".chosen");
+    previousElement && previousElement.classList.toggle("chosen");
+    document.getElementById(`${this.props.place.name}`).classList.toggle("chosen");
   }
 
   render() {
     return (
-      <div onClick={this.updateChosenPlace}>
+      <div id={`${this.props.place.name}`} className='' onClick={this.updateChosenPlace}>
       	<p>{`${this.props.place.name}`}</p>
       </div>
     );

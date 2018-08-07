@@ -27,11 +27,13 @@ class Side extends Component {
 	        query = {this.props.query}
 	        onupdateQuery={this.props.onupdateQuery}
         />
+
         <Locations
 	        places = {placesToShow}
 			chosenPlace = {this.props.chosenPlace}
 			onupdateChosenPlace = {this.props.onupdateChosenPlace}
         />
+
 
         <div className="attribution">
 			<a href="https://darksky.net/poweredby/">

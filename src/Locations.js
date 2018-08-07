@@ -18,7 +18,7 @@ class Locations extends Component {
           />
         </li>)
       )}
-
+      <li className="show-all"><i className="fas fa-level-down-alt"></i>  Show All</li>
 			</ul>
     </div>
     );

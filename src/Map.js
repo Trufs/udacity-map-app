@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Markers from './Markers.js';
 
-const markersArray = [];
-const infowindowsArray = [];
 class Map extends Component {
 	state = {
-	      map: false,
-        mapDisplayed: false
+	      mapScriptLoaded: false,
+        mapDisplayed: false,
+        markersArray: [],
+        infowindowsArray: []
 	    };
 
 //idea from https://stackoverflow.com/a/51437173
@@ -16,17 +15,19 @@ componentDidMount() {
     mapScript.defer = true;
     mapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDGkQx8UGmIKa8CxCfQv-1pgoIvhw9Nkvs';
     mapScript.addEventListener('load', () => {
-      this.setState({ map: true });
+      this.setState({ mapScriptLoaded: true });
     });
     console.log('appending script');
     document.body.appendChild(mapScript);
   }
 
   componentDidUpdate() {
+    const markersArray = [];
+    const infowindowsArray = [];
   //if the script is ready, create map
-    if (this.state.map) {
+    if (this.state.mapScriptLoaded) {
 
-      if (this.state.mapDisplayed === false){
+      if (this.state.mapDisplayed === false){ //make sure map only loads once
         console.log('entering if')
 
         this.map = new window.google.maps.Map(document.getElementById('map'), {
@@ -65,12 +66,14 @@ componentDidMount() {
         });
         })
 
-      this.setState({mapDisplayed:true})
+      this.setState({mapDisplayed:true});
+      this.setState({markersArray: markersArray});
+      this.setState({infowindowsArray: infowindowsArray});
 
     }
       //hide the markers that have no corresponding place
 
-      markersArray.map((marker) => {
+      this.state.markersArray.map((marker) => {
           marker.visible = false;
           this.props.places.map((place) => {
           if(marker.title === place.name) {
