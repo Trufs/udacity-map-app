@@ -73,6 +73,11 @@ componentDidMount() {
 
       }); //end of this.props.places.map
       this.map.fitBounds(bounds);
+      //close infowindow and stop bouncing when user clicks on the map
+      window.google.maps.event.addListener(this.map, "click", function(){
+        markersArray.map((marker) => marker.setAnimation(null));
+        infowindowsArray.map((infowindow) => infowindow.close());
+      });
 
       //change states
       this.setState({mapDisplayed:true}); //map is displayed now
