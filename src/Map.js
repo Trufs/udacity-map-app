@@ -34,9 +34,6 @@ componentDidMount() {
         mapTypeId: 'terrain',
       });
 
-      //add bounds
-      const bounds  = new window.google.maps.LatLngBounds()
-
       //create initial markers & infowindows
       this.props.places.map((place) => {
         //create a marker for each place
@@ -47,7 +44,7 @@ componentDidMount() {
           animation: window.google.maps.Animation.DROP,
           visible: true
         });
-        bounds.extend(marker.position);
+
         markersArray.push(marker); //add marker to the marker array
 
         //create infowindow for each place
@@ -72,7 +69,7 @@ componentDidMount() {
         }); //end of event listener for marker
 
       }); //end of this.props.places.map
-      this.map.fitBounds(bounds);
+
       //close infowindow and stop bouncing when user clicks on the map
       window.google.maps.event.addListener(this.map, "click", function(){
         markersArray.map((marker) => marker.setAnimation(null));
@@ -83,10 +80,12 @@ componentDidMount() {
       this.setState({mapDisplayed:true}); //map is displayed now
       this.setState({markersArray: markersArray}); //set markersArray as a state
       this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
-    } //end of first 'if' statement
+    } //end of the first 'if' statement
 
     //when map is already loaded, but the component changes, react accordingly
     if(this.props !== prevProps){
+      //get the map back to center
+      this.map.panTo({lat: 49.198333, lng: 19.842498});
       //if the list of places changed, hide the markers that have no corresponding place anymore
       this.state.infowindowsArray.map((infowindow) => {
         console.log('runnin')
@@ -122,9 +121,10 @@ componentDidMount() {
           }
         })
       }
-    } //end of second 'if' statement
 
-}
+    } //end of the second 'if' statement
+
+}//end of componentDidUpdate
 
   render() {
     return (
