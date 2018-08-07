@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//what's supposed to happen with the filtered locations?
+
 class Filter extends Component {
   constructor(props) {
     super(props);

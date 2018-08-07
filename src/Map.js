@@ -5,7 +5,7 @@ class Map extends Component {
 	      mapScriptLoaded: false,
         mapDisplayed: false,
         markersArray: [],
-        infowindowsArray: []
+        infowindowsArray: [],
 	    };
 
 //idea from https://stackoverflow.com/a/51437173
@@ -21,22 +21,22 @@ componentDidMount() {
     document.body.appendChild(mapScript);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const markersArray = [];
     const infowindowsArray = [];
-  //if the script is ready, create map
-    if (this.state.mapScriptLoaded) {
+    //if the script is ready & map is not displayed yet, create map
+    if (this.state.mapScriptLoaded && this.state.mapDisplayed === false) {
 
-      if (this.state.mapDisplayed === false){ //make sure map only loads once
-        console.log('entering if')
+      //display map
+      this.map = new window.google.maps.Map(document.getElementById('map'), {
+        center: {lat: 49.198333, lng: 19.71194419},
+        zoom: 10,
+        mapTypeId: 'terrain',
+      });
 
-        this.map = new window.google.maps.Map(document.getElementById('map'), {
-          center: {lat: 49.198333, lng: 19.71194419},
-          zoom: 10,
-          mapTypeId: 'terrain',
-        });
-        //create initial markers & infowindows
-        this.props.places.map((place) => {
+      //create initial markers & infowindows
+      this.props.places.map((place) => {
+        //create a marker for each place
         var marker = new window.google.maps.Marker({
           position: {lat: place.lat, lng: place.lng},
           map: this.map,
@@ -44,54 +44,74 @@ componentDidMount() {
           animation: window.google.maps.Animation.DROP,
           visible: true
         });
-        markersArray.push(marker)
+        markersArray.push(marker); //add marker to the marker array
+
+        //create infowindow for each place
         var infowindow = new window.google.maps.InfoWindow({
           content: `<div>${place.name}</div>
                     <div>${place.weather.currently.summary}</div>
                     <div>Precipitation Probability: ${place.weather.currently.precipProbability*100}%</div>
                     <div>Temperature: ${place.weather.currently.temperature} ˚C</div>
                     <div>Apparent Temperature: ${place.weather.currently.apparentTemperature} ˚C</div>
-                    <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>
-          `
+                    <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>`,
+          name: place.name
         });
+        infowindowsArray.push(infowindow); //add infowindow to infowindows array
 
+        //set behavior for markers when they're clicked
         marker.addListener('click', function() {
-          if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-          } else {
-            markersArray.map((marker) => marker.setAnimation(null)) //clear bouncing of other markers
-            marker.setAnimation(window.google.maps.Animation.BOUNCE);
-          }
-            infowindowsArray.map((infowindow) => infowindow.close());
-            infowindow.open(this.map, marker);
-            infowindowsArray.push(infowindow);
-        });
-        })
+            markersArray.map((marker) => marker.setAnimation(null)) //clear bouncing of all markers
+            marker.setAnimation(window.google.maps.Animation.BOUNCE); //make the chosen marker bounce
+            infowindowsArray.map((infowindow) => infowindow.close()); //close all infowindows
+            infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
+        }); //end of event listener for marker
 
-      this.setState({mapDisplayed:true});
-      this.setState({markersArray: markersArray});
-      this.setState({infowindowsArray: infowindowsArray});
+      }); //end of this.props.places.map
+      //change states
+      this.setState({mapDisplayed:true}); //map is displayed now
+      this.setState({markersArray: markersArray}); //set markersArray as a state
+      this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
+    } //end of first 'if' statement
 
-    }
-      //hide the markers that have no corresponding place
+    //when map is already loaded, but the component changes, react accordingly
+    if(this.props !== prevProps){
+      //if the list of places changed, hide the markers that have no corresponding place anymore
+      this.state.infowindowsArray.map((infowindow) => {
+        console.log('runnin')
+        infowindow.close();
+      });
 
       this.state.markersArray.map((marker) => {
+          //set all markers as not visible
           marker.visible = false;
+          //stop the bouncing
+          marker.setAnimation(null);
+          //go through the list of places and change the markers that should be displayed to visible
           this.props.places.map((place) => {
-          if(marker.title === place.name) {
-            marker.visible=true;
+            if(marker.title === place.name) {
+              marker.visible=true;
+            }
+          })
+        if(marker.visible === false){
+          marker.setMap(null);  //hide those marked for hiding
+        }else if(marker.map===null){
+          marker.setMap(this.map); //make sure those marked for showing are visible
+        }
+      })
 
+      //in a special case that just one place is showing, display corresponding infowindow
+      if(this.props.places.length === 1){
+        this.state.markersArray.map((marker) => {
+          if(marker.title === this.props.places[0].name){
+            marker.setAnimation(window.google.maps.Animation.BOUNCE);
+            const oneWindow = this.state.infowindowsArray.filter((infowindow) => (infowindow.name === marker.title));
+            oneWindow[0].open(this.map, marker);
           }
         })
-        if(marker.visible === false){
-          marker.setMap(null)
-        }else if(marker.map===null){
-          marker.setMap(this.map);
-        }
+      }
+    } //end of second 'if' statement
 
-      })
-    }
-  }
+}
 
   render() {
     return (

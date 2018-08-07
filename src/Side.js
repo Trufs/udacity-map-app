@@ -4,24 +4,9 @@ import Locations from './Locations.js';
 import img from './img/poweredby-darkbackground.png'
 
 class Side extends Component {
-	state = {
-		query: ''
-	}
-
-	updateQuery = (query) => {
-		this.setState({query: query});
-		console.log("it's side.js, I've got your query bae");
-		console.log(query);
-
-	}
 
   render() {
-	const match = new RegExp(this.state.query, 'i');
-  	let placesToShow = this.props.places.filter((place) => match.test(place.name));
-  	console.log(placesToShow);
-
     return (
-
       <nav>
         <Filter
 	        query = {this.props.query}
@@ -29,21 +14,18 @@ class Side extends Component {
         />
 
         <Locations
-	        places = {placesToShow}
-			chosenPlace = {this.props.chosenPlace}
-			onupdateChosenPlace = {this.props.onupdateChosenPlace}
-			onshowAll = {this.props.onshowAll}
+	        places = {this.props.places}
+					chosenPlace = {this.props.chosenPlace}
+					onupdateChosenPlace = {this.props.onupdateChosenPlace}
+					onshowAll = {this.props.onshowAll}
         />
 
-
         <div className="attribution">
-			<a href="https://darksky.net/poweredby/">
-				<img src={img} alt="darksky logo" height="38" width="95"/>
-			</a>
-		</div>
-      </nav>
-
-
+					<a href="https://darksky.net/poweredby/">
+						<img src={img} alt="darksky logo" height="38" width="95"/>
+					</a>
+				</div>
+	    </nav>
     );
   }
 }
