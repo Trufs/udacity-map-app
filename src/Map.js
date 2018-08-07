@@ -31,7 +31,7 @@ componentDidMount() {
         console.log('entering if')
 
         this.map = new window.google.maps.Map(document.getElementById('map'), {
-          center: {lat: 49.155698, lng: 20.044299},
+          center: {lat: 49.198333, lng: 19.71194419},
           zoom: 10,
           mapTypeId: 'terrain',
         });
@@ -48,8 +48,10 @@ componentDidMount() {
         var infowindow = new window.google.maps.InfoWindow({
           content: `<div>${place.name}</div>
                     <div>${place.weather.currently.summary}</div>
-                    <div>Temperature: ${place.weather.currently.temperature}</div>
-                    <div>Wind Speed: ${place.weather.currently.windSpeed}</div>
+                    <div>Precipitation Probability: ${place.weather.currently.precipProbability*100}%</div>
+                    <div>Temperature: ${place.weather.currently.temperature} ˚C</div>
+                    <div>Apparent Temperature: ${place.weather.currently.apparentTemperature} ˚C</div>
+                    <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>
           `
         });
 
@@ -78,6 +80,7 @@ componentDidMount() {
           this.props.places.map((place) => {
           if(marker.title === place.name) {
             marker.visible=true;
+
           }
         })
         if(marker.visible === false){

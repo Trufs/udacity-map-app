@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import Place from './Place.js';
 
-//where do locations come from?
+
 
 class Locations extends Component {
+  constructor(props) {
+    super(props);
+    this.showAll = this.showAll.bind(this);
+  }
+
+  showAll(e) {
+    this.props.onshowAll(e.target);
+  }
+
+
   render() {
     return (
     <div className="locations">
@@ -18,7 +28,9 @@ class Locations extends Component {
           />
         </li>)
       )}
-      <li className="show-all"><i className="fas fa-level-down-alt"></i>  Show All</li>
+      <li className="show-all" onClick={this.showAll}>
+        <i className="fas fa-angle-double-down"></i>  Show All
+      </li>
 			</ul>
     </div>
     );

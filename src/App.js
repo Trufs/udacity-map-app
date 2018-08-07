@@ -40,11 +40,19 @@ class App extends Component {
 		console.log(this.state.chosenPlace);  //chosen place's marker should bounce or sth and open the info window
 	}
 
+	showAll = () => {
+		let chosenElement = document.querySelector(".chosen");
+		chosenElement && chosenElement.classList.toggle("chosen");
+		placesToShow = places;
+		this.setState({query: ''});
+		this.setState({chosenPlace: ''});
+	}
+
 componentDidMount() {
 	//call to darksky for weather info
 	const proxyurl = "https://cors-anywhere.herokuapp.com/";
 	places.map((place) => (
-		fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=auto`) // https://cors-anywhere.herokuapp.com/https://example.com
+		fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
 		.then(response => response.json())
 		.then(contents => {
 			place.weather = contents;
@@ -54,7 +62,6 @@ componentDidMount() {
 		})
 	))
   }
-
 
   render() {
     return (
@@ -66,6 +73,7 @@ componentDidMount() {
           onupdateQuery={this.updateQuery}
           chosenPlace = {this.state.chosenPlace}
           onupdateChosenPlace = {this.updateChosenPlace}
+          onshowAll = {this.showAll}
        />
 
        {this.state.ready===places.length &&

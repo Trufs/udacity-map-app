@@ -32,6 +32,7 @@ class Side extends Component {
 	        places = {placesToShow}
 			chosenPlace = {this.props.chosenPlace}
 			onupdateChosenPlace = {this.props.onupdateChosenPlace}
+			onshowAll = {this.props.onshowAll}
         />
 
 
