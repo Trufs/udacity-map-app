@@ -7,7 +7,7 @@ class Side extends Component {
 
   render() {
     return (
-      <nav>
+      <nav className="hidden">
         <Filter
 	        query = {this.props.query}
 	        onupdateQuery={this.props.onupdateQuery}

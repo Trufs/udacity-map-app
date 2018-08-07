@@ -29,10 +29,13 @@ componentDidMount() {
 
       //display map
       this.map = new window.google.maps.Map(document.getElementById('map'), {
-        center: {lat: 49.198333, lng: 19.71194419},
+        center: {lat: 49.198333, lng: 19.842498},
         zoom: 10,
         mapTypeId: 'terrain',
       });
+
+      //add bounds
+      const bounds  = new window.google.maps.LatLngBounds()
 
       //create initial markers & infowindows
       this.props.places.map((place) => {
@@ -44,6 +47,7 @@ componentDidMount() {
           animation: window.google.maps.Animation.DROP,
           visible: true
         });
+        bounds.extend(marker.position);
         markersArray.push(marker); //add marker to the marker array
 
         //create infowindow for each place
@@ -64,9 +68,12 @@ componentDidMount() {
             marker.setAnimation(window.google.maps.Animation.BOUNCE); //make the chosen marker bounce
             infowindowsArray.map((infowindow) => infowindow.close()); //close all infowindows
             infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
+            this.map.panTo(marker.getPosition());
         }); //end of event listener for marker
 
       }); //end of this.props.places.map
+      this.map.fitBounds(bounds);
+
       //change states
       this.setState({mapDisplayed:true}); //map is displayed now
       this.setState({markersArray: markersArray}); //set markersArray as a state
@@ -103,6 +110,7 @@ componentDidMount() {
       if(this.props.places.length === 1){
         this.state.markersArray.map((marker) => {
           if(marker.title === this.props.places[0].name){
+            this.map.panTo(marker.getPosition());
             marker.setAnimation(window.google.maps.Animation.BOUNCE);
             const oneWindow = this.state.infowindowsArray.filter((infowindow) => (infowindow.name === marker.title));
             oneWindow[0].open(this.map, marker);

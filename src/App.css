@@ -32,6 +32,7 @@ header {
   margin:5px;
   width: 20%;
   text-align: center;
+  cursor: pointer;
 }
 
 
@@ -51,6 +52,10 @@ nav {
   top: 100px;
   z-index: 1;
   font-size: 0.9em;
+}
+
+.hidden {
+  display: none;
 }
 
 .filter, .locations {
@@ -87,7 +92,7 @@ ul {
 /* Map */
 .container {
   position: absolute;
-  top: 0;
+  top: 100;
   right: 0;
   bottom: 0;
   left: 0;
@@ -106,7 +111,6 @@ ul {
   background-color: red;
   color: black;
 }
-
 
 
 /*media queries*/
