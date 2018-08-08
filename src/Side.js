@@ -19,7 +19,7 @@ class Side extends Component {
 					onupdateChosenPlace = {this.props.onupdateChosenPlace}
 					onshowAll = {this.props.onshowAll}
         />
-
+        <div className="weatherInfo" tabIndex="-1"></div>
         <div className="attribution">
 					<a href="https://darksky.net/poweredby/">
 						<img src={img} alt="darksky logo" className="darksky" height="38" width="95"/>

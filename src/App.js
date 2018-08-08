@@ -4,6 +4,7 @@ import Map from './Map.js';
 import Header from './Header.js';
 import Side from './Side.js';
 
+
 const places = [
 			{name: 'Rysy', lat: 49.179548, lng: 20.088064},
 			{name: 'Krywan', lat: 49.162545, lng: 19.999916},
@@ -60,6 +61,7 @@ class App extends Component {
         <Map
           places={this.state.chosenPlace || placesToShow}
         />
+
       </React.Fragment>
     );
   }

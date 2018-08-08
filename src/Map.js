@@ -14,18 +14,18 @@ class Map extends Component {
         failed: false
 	    };
       this.createInfowindows = this.createInfowindows.bind(this);
+      this.createInfoWeather = this.createInfoWeather.bind(this);
 }
 
-//create infowindows
+//create infowindows this.state.ready === this.props.places.length
 createInfowindows = (marker, place) => {
   var infowindow = new window.google.maps.InfoWindow({
     content: `<h4>${marker.title}</h4><div>Sorry, the weather data is currently unavailable.</div>`,
     name: marker.title
     });
 
-  if(this.state.ready === this.props.places.length){
+  if(this.state.failed === false){
     const weatherInfo = `<div>${place.weather.currently.summary}</div>
-    <div>Precipitation Probability: ${place.weather.currently.precipProbability*100}%</div>
     <div>Temperature: ${place.weather.currently.temperature} ˚C</div>
     <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>`;
     infowindow.setContent(`<h4>${marker.title}</h4><div>${weatherInfo}</div>`);
@@ -34,6 +34,18 @@ createInfowindows = (marker, place) => {
   infowindowsArray.push(infowindow); //add infowindow to infowindows array
   infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
   this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
+}
+
+createInfoWeather = (place) => {
+  const infoWeather = document.querySelector(".weatherInfo");
+  infoWeather.innerHTML=`<h4>${place.name}</h4><div>Sorry, the weather data is currently unavailable.</div>`;
+  if(this.state.failed === false){
+    const weatherInfo = `<div>${place.weather.currently.summary}</div>
+    <div>Temperature: ${place.weather.currently.temperature} ˚C</div>
+    <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>`;
+    infoWeather.innerHTML=`<h4>${place.name}</h4><div>${weatherInfo}</div>`;
+  }
+  document.querySelector(".weatherInfo").focus();
 }
 
 
@@ -57,7 +69,7 @@ componentDidMount() {
   //call to darksky for weather info
   const proxyurl = "https://cors-anywhere.herokuapp.com/";
   this.props.places.map((place) => (
-    fetch(proxyurl + `https://api.darkky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
+    fetch(proxyurl + `https://api.darksky.net/frecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
     .then(response => response.json())
     .then(contents => {
       place.weather = contents;
@@ -156,7 +168,8 @@ componentDidMount() {
           if(marker.title === this.props.places[0].name){
             this.map.panTo(marker.getPosition());
             marker.setAnimation(window.google.maps.Animation.BOUNCE);
-            this.createInfowindows(marker, this.props.place);
+            this.createInfowindows(marker, this.props.places[0]);
+            this.createInfoWeather(this.props.places[0]);
           }
         })
       }

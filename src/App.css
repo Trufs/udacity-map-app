@@ -59,6 +59,11 @@ nav {
   left:-10000px;
 }
 
+.weatherInfo{
+  position:absolute;
+  left:-10000px;
+}
+
 .filter, .locations {
   margin: 2px;
   margin-bottom: 7px;
