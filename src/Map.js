@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-let nbReady = 0;
+
 const infowindowsArray = [];
 class Map extends Component {
     constructor(props) {
@@ -10,14 +10,13 @@ class Map extends Component {
         mapDisplayed: false,
         markersArray: [],
         infowindowsArray: [],
-        ready: 0,
         failed: false
 	    };
-      this.createInfowindows = this.createInfowindows.bind(this);
-      this.createInfoWeather = this.createInfoWeather.bind(this);
+    this.createInfowindows = this.createInfowindows.bind(this);
+    this.createInfoWeather = this.createInfoWeather.bind(this);
 }
 
-//create infowindows this.state.ready === this.props.places.length
+//create infowindows
 createInfowindows = (marker, place) => {
   var infowindow = new window.google.maps.InfoWindow({
     content: `<h4>${marker.title}</h4><div>Sorry, the weather data is currently unavailable.</div>`,
@@ -49,8 +48,8 @@ createInfoWeather = (place) => {
 }
 
 
-//idea from https://stackoverflow.com/a/51437173
 componentDidMount() {
+//idea for map loading from https://stackoverflow.com/a/51437173
     const mapScript = document.createElement('script');
     mapScript.async = true;
     mapScript.defer = true;
@@ -73,9 +72,6 @@ componentDidMount() {
     .then(response => response.json())
     .then(contents => {
       place.weather = contents;
-      nbReady += 1;
-      this.setState({ready: nbReady});
-      console.log(this.state.ready)
     })
     .catch(error => {
       console.log(error);
@@ -163,7 +159,7 @@ componentDidMount() {
       })
 
       //in a special case that just one place is showing, display corresponding infowindow
-      if(this.props.places.length === 1){
+      if(this.props.places.length === 1 && this.props.chosenPlace){
         this.state.markersArray.map((marker) => {
           if(marker.title === this.props.places[0].name){
             this.map.panTo(marker.getPosition());
