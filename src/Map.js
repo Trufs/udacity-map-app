@@ -31,11 +31,10 @@ createInfowindows = (marker, place) => {
     infowindow.setContent(`<h4>${marker.title}</h4><div>${weatherInfo}</div>`);
   }
 
-    infowindowsArray.push(infowindow); //add infowindow to infowindows array
-    infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
-    this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
+  infowindowsArray.push(infowindow); //add infowindow to infowindows array
+  infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
+  this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
 }
-
 
 
 //idea from https://stackoverflow.com/a/51437173
@@ -50,10 +49,15 @@ componentDidMount() {
     console.log('appending script');
     document.body.appendChild(mapScript);
 
+   if(this.state.mapScriptLoaded === false){
+      var warning = document.querySelector('.warning');
+      warning.classList.remove("hidden-for-everyone");
+    }
+
   //call to darksky for weather info
   const proxyurl = "https://cors-anywhere.herokuapp.com/";
   this.props.places.map((place) => (
-    fetch(proxyurl + `https://api.darksky.net/foecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
+    fetch(proxyurl + `https://api.darkky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
     .then(response => response.json())
     .then(contents => {
       place.weather = contents;
@@ -70,9 +74,9 @@ componentDidMount() {
 
   componentDidUpdate(prevProps) {
     const markersArray = [];
+
     //if the script is ready & map is not displayed yet & weather data is ready, create map && this.state.ready===this.props.places.length
     if (this.state.mapScriptLoaded && this.state.mapDisplayed === false ) {
-
       //display map
       this.map = new window.google.maps.Map(document.getElementById('map'), {
         center: {lat: 49.198333, lng: 19.842498},
@@ -114,10 +118,13 @@ componentDidMount() {
       this.setState({markersArray: markersArray}); //set markersArray as a state
     } //end of the first 'if' statement
 
-
+      if(this.state.mapDisplayed){
+        var warning = document.querySelector('.warning');
+        warning.classList.add("hidden-for-everyone");
+      }
 
     //when map is already loaded, but the component changes, react accordingly
-    if(this.props !== prevProps){
+    if(this.state.mapDisplayed && this.props !== prevProps){
       //get the map back to center
       this.map.panTo({lat: 49.198333, lng: 19.842498});
       //if the list of places changed, hide the markers that have no corresponding place anymore
@@ -150,8 +157,6 @@ componentDidMount() {
             this.map.panTo(marker.getPosition());
             marker.setAnimation(window.google.maps.Animation.BOUNCE);
             this.createInfowindows(marker, this.props.place);
-            // const oneWindow = this.state.infowindowsArray.filter((infowindow) => (infowindow.name === marker.title));
-            // oneWindow[0].open(this.map, marker);
           }
         })
       }
@@ -163,6 +168,7 @@ componentDidMount() {
   render() {
     return (
       <div className="container">
+
 	      <div id="map"></div>
       </div>
     );
