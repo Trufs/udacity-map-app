@@ -14,7 +14,7 @@ class Locations extends Component {
   render() {
     return (
       <div className="locations">
-        <p> Peaks & Towns </p>
+        <h2> Peaks & Towns </h2>
   			<ul>
         {this.props.places.map((place) => (
           <li key={place.name}>
@@ -26,10 +26,13 @@ class Locations extends Component {
           </li>
           )
         )}
-          <li className="show-all" onClick={this.showAll}>
+        </ul>
+
+          <button className="show-all" onClick={this.showAll}>
             <i className="fas fa-angle-double-down"></i> Show All
-          </li>
-  			</ul>
+          </button>
+
+
       </div>
     );
   }

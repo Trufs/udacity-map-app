@@ -9,21 +9,19 @@ const places = [
 			{name: 'Krywan', lat: 49.162545, lng: 19.999916},
 			{name: 'Lomnica', lat: 49.195301, lng: 20.213147},
 			{name: 'Koscielec', lat: 49.2254, lng: 20.014574},
-			{name: 'Bystra', lat: 49.189007, lng: 19.842498},
-			{name: 'Banikov', lat: 49.198333, lng: 19.71194419},
-			{name: 'Zakopane', lat: 49.299181, lng: 19.949562},
-			{name: 'Zuberzec', lat: 49.260516, lng: 19.614379},
-			{name: 'Stary Smokovec', lat: 49.139046, lng: 20.220382}
+			{name: 'Bystra', lat: 49.189007, lng: 19.842498}
+			// {name: 'Banikov', lat: 49.198333, lng: 19.71194419},
+			// {name: 'Zakopane', lat: 49.299181, lng: 19.949562},
+			// {name: 'Zuberzec', lat: 49.260516, lng: 19.614379},
+			// {name: 'Stary Smokovec', lat: 49.139046, lng: 20.220382}
 			];
 
 let placesToShow = places;
-let nbReady = 0;
 
 class App extends Component {
 	state = {
 		query: '',
 		chosenPlace: '',
-		ready: 0
 	}
 
 	updateQuery = (query) => {
@@ -46,21 +44,6 @@ class App extends Component {
 		this.setState({chosenPlace: ''});
 	}
 
-componentDidMount() {
-	//call to darksky for weather info
-	const proxyurl = "https://cors-anywhere.herokuapp.com/";
-	places.map((place) => (
-		fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
-		.then(response => response.json())
-		.then(contents => {
-			place.weather = contents;
-			nbReady += 1;
-			this.setState({ready: nbReady});
-			console.log(this.state.ready)
-		})
-	))
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -73,12 +56,9 @@ componentDidMount() {
           onupdateChosenPlace = {this.updateChosenPlace}
           onshowAll = {this.showAll}
        />
-
-       {this.state.ready===places.length &&
-          <Map
-	          places={this.state.chosenPlace || placesToShow}
-          />
-      }
+        <Map
+          places={this.state.chosenPlace || placesToShow}
+        />
       </React.Fragment>
     );
   }

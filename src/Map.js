@@ -1,12 +1,42 @@
 import React, { Component } from 'react';
 
+let nbReady = 0;
+const infowindowsArray = [];
 class Map extends Component {
-	state = {
+    constructor(props) {
+    super(props);
+    this.state = {
 	      mapScriptLoaded: false,
         mapDisplayed: false,
         markersArray: [],
         infowindowsArray: [],
+        ready: 0,
+        failed: false
 	    };
+      this.createInfowindows = this.createInfowindows.bind(this);
+}
+
+//create infowindows
+createInfowindows = (marker, place) => {
+  var infowindow = new window.google.maps.InfoWindow({
+    content: `<h4>${marker.title}</h4><div>Sorry, the weather data is currently unavailable.</div>`,
+    name: marker.title
+    });
+
+  if(this.state.ready === this.props.places.length){
+    const weatherInfo = `<div>${place.weather.currently.summary}</div>
+    <div>Precipitation Probability: ${place.weather.currently.precipProbability*100}%</div>
+    <div>Temperature: ${place.weather.currently.temperature} ˚C</div>
+    <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>`;
+    infowindow.setContent(`<h4>${marker.title}</h4><div>${weatherInfo}</div>`);
+  }
+
+    infowindowsArray.push(infowindow); //add infowindow to infowindows array
+    infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
+    this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
+}
+
+
 
 //idea from https://stackoverflow.com/a/51437173
 componentDidMount() {
@@ -19,13 +49,29 @@ componentDidMount() {
     });
     console.log('appending script');
     document.body.appendChild(mapScript);
+
+  //call to darksky for weather info
+  const proxyurl = "https://cors-anywhere.herokuapp.com/";
+  this.props.places.map((place) => (
+    fetch(proxyurl + `https://api.darksky.net/foecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
+    .then(response => response.json())
+    .then(contents => {
+      place.weather = contents;
+      nbReady += 1;
+      this.setState({ready: nbReady});
+      console.log(this.state.ready)
+    })
+    .catch(error => {
+      console.log(error);
+      this.setState({failed: true});
+    })
+  ))
   }
 
   componentDidUpdate(prevProps) {
     const markersArray = [];
-    const infowindowsArray = [];
-    //if the script is ready & map is not displayed yet, create map
-    if (this.state.mapScriptLoaded && this.state.mapDisplayed === false) {
+    //if the script is ready & map is not displayed yet & weather data is ready, create map && this.state.ready===this.props.places.length
+    if (this.state.mapScriptLoaded && this.state.mapDisplayed === false ) {
 
       //display map
       this.map = new window.google.maps.Map(document.getElementById('map'), {
@@ -34,7 +80,7 @@ componentDidMount() {
         mapTypeId: 'terrain',
       });
 
-      //create initial markers & infowindows
+      //create initial markers
       this.props.places.map((place) => {
         //create a marker for each place
         var marker = new window.google.maps.Marker({
@@ -47,27 +93,14 @@ componentDidMount() {
 
         markersArray.push(marker); //add marker to the marker array
 
-        //create infowindow for each place
-        var infowindow = new window.google.maps.InfoWindow({
-          content: `<div>${place.name}</div>
-                    <div>${place.weather.currently.summary}</div>
-                    <div>Precipitation Probability: ${place.weather.currently.precipProbability*100}%</div>
-                    <div>Temperature: ${place.weather.currently.temperature} ˚C</div>
-                    <div>Apparent Temperature: ${place.weather.currently.apparentTemperature} ˚C</div>
-                    <div>Wind Speed: ${place.weather.currently.windSpeed} km/h</div>`,
-          name: place.name
-        });
-        infowindowsArray.push(infowindow); //add infowindow to infowindows array
-
-        //set behavior for markers when they're clicked
-        marker.addListener('click', function() {
+          //set behavior for markers when they're clicked
+          marker.addListener('click', () => {
             markersArray.map((marker) => marker.setAnimation(null)) //clear bouncing of all markers
             marker.setAnimation(window.google.maps.Animation.BOUNCE); //make the chosen marker bounce
-            infowindowsArray.map((infowindow) => infowindow.close()); //close all infowindows
-            infowindow.open(this.map, marker); //open only the infowindow of the chosen marker
-            this.map.panTo(marker.getPosition());
-        }); //end of event listener for marker
-
+            this.map.panTo(marker.getPosition()); //center map on the clicked marker
+            infowindowsArray && infowindowsArray.map((infowindow) => infowindow.close()); //close all infowindows
+            this.createInfowindows(marker, place); //create and open corresponding infowindow
+          }); //end of event listener for marker
       }); //end of this.props.places.map
 
       //close infowindow and stop bouncing when user clicks on the map
@@ -79,8 +112,9 @@ componentDidMount() {
       //change states
       this.setState({mapDisplayed:true}); //map is displayed now
       this.setState({markersArray: markersArray}); //set markersArray as a state
-      this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
     } //end of the first 'if' statement
+
+
 
     //when map is already loaded, but the component changes, react accordingly
     if(this.props !== prevProps){
@@ -88,7 +122,6 @@ componentDidMount() {
       this.map.panTo({lat: 49.198333, lng: 19.842498});
       //if the list of places changed, hide the markers that have no corresponding place anymore
       this.state.infowindowsArray.map((infowindow) => {
-        console.log('runnin')
         infowindow.close();
       });
 
@@ -116,8 +149,9 @@ componentDidMount() {
           if(marker.title === this.props.places[0].name){
             this.map.panTo(marker.getPosition());
             marker.setAnimation(window.google.maps.Animation.BOUNCE);
-            const oneWindow = this.state.infowindowsArray.filter((infowindow) => (infowindow.name === marker.title));
-            oneWindow[0].open(this.map, marker);
+            this.createInfowindows(marker, this.props.place);
+            // const oneWindow = this.state.infowindowsArray.filter((infowindow) => (infowindow.name === marker.title));
+            // oneWindow[0].open(this.map, marker);
           }
         })
       }

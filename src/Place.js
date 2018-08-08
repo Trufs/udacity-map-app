@@ -16,7 +16,7 @@ class Place extends Component {
   render() {
     return (
       <div id={`${this.props.place.name}`} className='' onClick={this.updateChosenPlace}>
-      	<p>{`${this.props.place.name}`}</p>
+      	<button>{`${this.props.place.name}`}</button>
       </div>
     );
   }
