@@ -24,15 +24,12 @@ class Locations extends Component {
             onupdateChosenPlace = {this.props.onupdateChosenPlace}
             />
           </li>
-          )
-        )}
+          ))}
         </ul>
 
-          <button className="show-all" onClick={this.showAll}>
-            <i className="fas fa-angle-double-down"></i> Show All
-          </button>
-
-
+        <button className="show-all" onClick={this.showAll}>
+          <i className="fas fa-angle-double-down"></i> Show All
+        </button>
       </div>
     );
   }

@@ -35,6 +35,7 @@ class App extends Component {
 
 	updateChosenPlace = (chosenPlace) => {
 		this.setState({chosenPlace: places.filter((place) => place.name === chosenPlace)});
+		console.log(this.state.chosenPlace)
 	}
 
 	showAll = () => {
@@ -60,6 +61,7 @@ class App extends Component {
        />
         <Map
           places={this.state.chosenPlace || placesToShow}
+          chosenPlace = {this.state.chosenPlace}
         />
 
       </React.Fragment>
