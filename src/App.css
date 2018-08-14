@@ -34,7 +34,6 @@ header {
   cursor: pointer;
 }
 
-
 h1 {
   width: 80%;
   text-align: center;
@@ -59,7 +58,7 @@ nav {
   left:-10000px;
 }
 
-.weatherInfo{
+.weatherInfo {
   position:absolute;
   left:-10000px;
 }
@@ -252,7 +251,6 @@ h4 {
 }
 
 @media screen and (max-width:300px){
-
   h1 {
     font-size: 1.3em;
   }

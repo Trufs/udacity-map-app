@@ -10,7 +10,7 @@ class Side extends Component {
 	    <nav className="hidden">
 	      <Filter
 	        query = {this.props.query}
-	        onupdateQuery={this.props.onupdateQuery}
+	        onupdateQuery = {this.props.onupdateQuery}
 	      />
 
 	      <Locations

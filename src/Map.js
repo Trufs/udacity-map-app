@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-
 const infowindowsArray = [];
+
 class Map extends Component {
   constructor(props) {
   super(props);
@@ -16,7 +16,7 @@ class Map extends Component {
 
 //create infowindows
 createInfowindows = (marker, place) => {
-  var infowindow = new window.google.maps.InfoWindow({
+  const infowindow = new window.google.maps.InfoWindow({
     content: `<h4>${marker.title}</h4><div>Sorry, the weather data is currently unavailable.</div>`,
     name: marker.title
     });
@@ -33,7 +33,7 @@ createInfowindows = (marker, place) => {
   this.setState({infowindowsArray: infowindowsArray}); //set infowindowsArray as a state
 }
 
-//create div with info for screenreaders
+//create divs with info for screenreaders
 createInfoWeather = (place) => {
   const infoWeather = document.querySelector(".weatherInfo");
   infoWeather.innerHTML=`<h4>${place.name}</h4><div>Sorry, the weather data is currently unavailable.</div>`;
@@ -46,6 +46,7 @@ createInfoWeather = (place) => {
   document.querySelector(".weatherInfo").focus();
 }
 
+//change displayed places when user choses some of them (either by filter or clicking one)
   manageMarkersChoice = () => {
     //get the map back to center
     this.map.panTo({lat: 49.198333, lng: 19.842498});
@@ -81,7 +82,7 @@ createInfoWeather = (place) => {
         }
       })
     }
-  } //end of function
+  } //end of manageMarkersChoice function
 
 
   componentDidMount() {
@@ -104,7 +105,7 @@ createInfoWeather = (place) => {
     //call to darksky for weather info
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     this.props.places.map((place) => (
-      fetch(proxyurl + `https://api.darksky.net/forecat/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
+      fetch(proxyurl + `https://api.darksky.net/forecast/4d9815b80f6cb2b5257e16dd82945f14/${place.lat},${place.lng}?exclude=[minutely, hourly, daily&units=ca`) // https://cors-anywhere.herokuapp.com/https://example.com
       .then(response => response.json())
       .then(contents => {
         place.weather = contents;
@@ -131,7 +132,7 @@ createInfoWeather = (place) => {
       //create markers
       this.props.places.map((place) => {
         //create a marker for each place
-        var marker = new window.google.maps.Marker({
+        const marker = new window.google.maps.Marker({
           position: {lat: place.lat, lng: place.lng},
           map: this.map,
           title: place.name,
@@ -164,7 +165,7 @@ createInfoWeather = (place) => {
 
     //if the map loaded, hide the warning
     if(this.state.mapDisplayed){
-      var warning = document.querySelector('.warning');
+      const warning = document.querySelector('.warning');
       warning.classList.add("hidden-for-everyone");
     }
 

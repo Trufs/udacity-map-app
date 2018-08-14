@@ -3,8 +3,9 @@ import img from './img/iconfinder-icon.svg';
 
 class Header extends Component {
 
+//function for hiding side menu
   hideNav = () => {
-    let nav = document.querySelector("nav");
+    const nav = document.querySelector("nav");
     nav.classList.toggle("hidden");
   }
 
@@ -19,6 +20,5 @@ class Header extends Component {
     );
   }
 }
-        // <i className="fas fa-bars fa-2x"></i>
 
 export default Header;

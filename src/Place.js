@@ -8,7 +8,7 @@ class Place extends Component {
 
   updateChosenPlace(e) {
     this.props.onupdateChosenPlace(e.target.textContent);
-    let previousElement = document.querySelector(".chosen");
+    const previousElement = document.querySelector(".chosen");
     previousElement && previousElement.classList.toggle("chosen");
     document.getElementById(`${this.props.place.name}`).classList.toggle("chosen");
   }
