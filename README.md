@@ -6,10 +6,12 @@ Can be used with any browser that supports ES6. Needs npm installed (see Install
 
 ### Installing
 To start the app, run 'npm run build' in your terminal, then 'serve -s build' to start the server. It will take one of the ports and open the app in your browser.
+
 If you don't have npm installed, run 'npm install' first.
 
 ### Instructions
 The app shows a map with various locations in Tatra Mountains. You can click the menu icon in top left corner to open the list of locations. Choosing one location either from the list or on the map will show you the current weather in that place according to [darksky.net](https://darksky.net/poweredby/).
+
 You can filter the list using the text field above the list. To clear the filter, click "Show all".
 
 ### Dependencies
