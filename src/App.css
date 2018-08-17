@@ -40,7 +40,7 @@ h1 {
 }
 
 /* Side */
-nav {
+.side {
   color: white;
   width: 20%;
   height: 100%;
@@ -144,7 +144,7 @@ h4 {
 }
 
 .warning {
-  background-color: #44D7A8;
+  /*background-color: #44D7A8;*/
   position: absolute;
   top: 15%;
   width: 100%;
@@ -170,7 +170,7 @@ h4 {
     font-size: 1.8em;
   }
 
-  nav {
+  .side {
     width: 25%;
     padding: 10px;
   }
@@ -181,7 +181,7 @@ h4 {
   h1 {
     font-size: 1.7em;
   }
-  nav {
+  .side {
     padding: 5px;
   }
 
@@ -192,7 +192,7 @@ h4 {
     font-size: 1.6em;
   }
 
-  nav {
+  .side {
     width: 27%;
     padding: 2px;
     font-size: 0.8em;
@@ -208,7 +208,7 @@ h4 {
     font-size: 1.5em;
   }
 
-  nav {
+  .side {
     width: 27%;
     padding: 2px;
     font-size: 0.8em;
@@ -230,7 +230,7 @@ h4 {
     font-size: 1.5em;
   }
 
-  nav {
+  .side {
     width: 30%;
     padding: 0;
     font-size: 0.7em;
@@ -255,7 +255,7 @@ h4 {
     font-size: 1.3em;
   }
 
-  nav {
+  .side {
     width: 35%;
   }
 

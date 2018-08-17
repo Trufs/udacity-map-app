@@ -5,16 +5,16 @@ class Header extends Component {
 
 //function for hiding side menu
   hideNav = () => {
-    const nav = document.querySelector("nav");
-    nav.classList.toggle("hidden");
+    const side = document.querySelector(".side");
+    side.classList.toggle("hidden");
   }
 
   render() {
     return (
       <header>
-      	<div className="menu-icon" onClick={this.hideNav}>
+      	<button className="menu-icon" onClick={this.hideNav}>
         <img src={img} alt="menu" />
-      	</div>
+      	</button>
         <h1>Map App</h1>
       </header>
     );

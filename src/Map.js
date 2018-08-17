@@ -84,15 +84,24 @@ createInfoWeather = (place) => {
     }
   } //end of manageMarkersChoice function
 
+handleMapError = () => {
+  console.log('error');
+  var warning = document.querySelector('.warning');
+  warning.innerHTML='Sorry, the map is unavailable.';
+  }
 
   componentDidMount() {
   //idea for map loading from https://stackoverflow.com/a/51437173
     const mapScript = document.createElement('script');
     mapScript.async = true;
     mapScript.defer = true;
+    // mapScript.onerror = this.handleMapError();
     mapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDGkQx8UGmIKa8CxCfQv-1pgoIvhw9Nkvs';
     mapScript.addEventListener('load', () => {
       this.setState({ mapScriptLoaded: true });
+    });
+    mapScript.addEventListener('error', () => {
+      this.handleMapError();
     });
     console.log('appending script');
     document.body.appendChild(mapScript);

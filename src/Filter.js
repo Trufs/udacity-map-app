@@ -12,7 +12,7 @@ class Filter extends Component {
 
   render() {
     return (
-      <div className="filter">
+      <div role="menuitem" className="filter">
       <label htmlFor="filter">Search for locations </label>
       	<input id="filter"
 	      	type="text"

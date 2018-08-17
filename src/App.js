@@ -52,7 +52,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <Header />
-        <div className="warning hidden-for-everyone">Sorry! The map is not available at the moment.</div>
+        <div className="warning hidden-for-everyone">Loading map...</div>
       <Side
         places = {placesToShow}
         query = {this.state.query}

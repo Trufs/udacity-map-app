@@ -7,7 +7,7 @@ class Side extends Component {
 
   render() {
     return (
-	    <nav className="hidden">
+	    <div className="hidden side">
 	      <Filter
 	        query = {this.props.query}
 	        onupdateQuery = {this.props.onupdateQuery}
@@ -25,7 +25,7 @@ class Side extends Component {
 						<img src={img} alt="darksky logo" className="darksky" height="38" width="95"/>
 					</a>
 				</div>
-	    </nav>
+	    </div>
     );
   }
 }
