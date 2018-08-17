@@ -5,6 +5,7 @@ An app for checking weather data in [Tatra Mountains](https://en.wikipedia.org/w
 Can be used with any browser that supports ES6. Needs npm installed (see Installing).
 
 ### Installing
+
 To start the app in production mode, run 'npm run build' in your terminal, then 'serve -s build' to start the server. It will take one of the ports and open the app in your browser.
 
 To run in development mode, use "npm start".
